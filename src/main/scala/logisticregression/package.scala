@@ -1,4 +1,5 @@
 import breeze.linalg.{DenseMatrix, DenseVector}
+import breeze.stats.mean
 
 package object logisticregression {
 
@@ -19,4 +20,19 @@ package object logisticregression {
     (trainX, testX, trainY, testY)
   }
 
+  def thresholdProbability(predProbs: DenseVector[Double], threshold: Double = 0.5): DenseVector[Double] = {
+    // Assign labels based on whether probabilities are above or below a threshold
+    val predsAbove = predProbs >:> threshold
+
+    val predsThresholded = DenseVector.ones[Double](predProbs.length)
+    predsThresholded(predsAbove) := 1.0
+    predsThresholded(!predsAbove) := 0.0
+
+    predsThresholded
+  }
+
+  def accuracyScore(predLabels: DenseVector[Double], trueLabels: DenseVector[Double]): Double = {
+    // Simple accuracy score
+    1 - mean(predLabels - trueLabels)
+  }
 }
