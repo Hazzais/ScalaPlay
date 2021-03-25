@@ -1,4 +1,5 @@
 package logisticregression
+
 import breeze.linalg.DenseMatrix
 import breeze.linalg.DenseVector
 import breeze.numerics.{exp, log}
@@ -7,17 +8,7 @@ import breeze.stats.mean
 import breeze.linalg.csvread
 import java.io.File
 
-//class LogisticRegression() {
-//
-//  def sigmoid(input)
-//
-//
-//}
-
-//https://stackoverflow.com/questions/38935272/how-can-i-write-logistic-regression-with-scala-breeze-with-lbfgs?rq=1
-
 object RunLogisticRegression {
-
 
   def sigmoid(z: DenseVector[Double]): DenseVector[Double] = {
     1d /:/ (1d +:+ exp(-z))
@@ -28,9 +19,9 @@ object RunLogisticRegression {
     (x.t * (sigma -:- y)) / nRows
   }
 
-//  def loss(labels: DenseVector[Double], sigma: DenseVector[Double]): Double = {
-//    mean(-labels *:* log(sigma) -:- (1 -:- labels) *:* log(1 -:- sigma))
-//  }
+  def findLoss(y: DenseVector[Double], sigma: DenseVector[Double]): Double = {
+    mean(-y *:* log(sigma) -:- (1d -:- y) *:* log(1d -:- sigma))
+  }
 
   def iterateFit(nIterations: Int, x: DenseMatrix[Double],
                  y: DenseVector[Double], weights: DenseVector[Double], learningRate: Double): DenseVector[Double] = {
@@ -40,7 +31,7 @@ object RunLogisticRegression {
 
     val z = x * weights
     val sigma = sigmoid(z)
-    val loss = mean(-y *:* log(sigma) -:- (1d -:- y) *:* log(1d -:- sigma))
+    val loss = findLoss(y, sigma)
     println(s"Loss: $loss")
 
     val deltaWeights = gradientDescent(x, y, sigma)
@@ -51,23 +42,6 @@ object RunLogisticRegression {
     } else {
       iterateFit(nIterations - 1, x, y, weights, learningRate)
     }
-  }
-
-  def train_test_split(x: DenseMatrix[Double], y: DenseVector[Double],
-                       test_size: Double):
-    (DenseMatrix[Double], DenseMatrix[Double], DenseVector[Double], DenseVector[Double]) = {
-
-    val randNumbers = DenseVector.rand(x.rows)
-
-    val trainRows =  randNumbers >:> test_size
-    val testRows =  !trainRows
-
-    val trainX = x(trainRows, ::).toDenseMatrix
-    val trainY = y(trainRows).toDenseVector
-
-    val testX = x(testRows, ::).toDenseMatrix
-    val testY = y(testRows).toDenseVector
-    (trainX, testX, trainY, testY)
   }
 
   def main(args: Array[String]): Unit = {
