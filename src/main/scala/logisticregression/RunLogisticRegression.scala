@@ -8,17 +8,24 @@ import java.io.File
 object RunLogisticRegression {
 
   def main(args: Array[String]): Unit = {
-    // Example usage of LogisticRegression
-    // Takes a CSV (filename specified in arg(0)), and builds logistic regression model to use all but final column, to
-    // predict 0 or 1 of final column. Does simple train/test split.
-    // Assumptions:
-    //  - Final column in CSV is what needs to be modelled and is only 0 and 1 (rows with column equal or greater than
-    //    two are removed though)
-    //  - All feature columns numerics
-    //  - All feature columns are roughly the same scale (no scaling performed). Otherwise model will be poor.
-    //  - No regularistion needs to occur (should be a simple amendment to loss/gradient descent function if needed)
-    //  - Learning rate is 0.5, number of iterations is 20. Another couple of arguments would need to be added to allow
-    //    the user to change this, but should be quick to do.
+    /*
+    Example of using LogisticRegression
+
+    Takes a CSV (filename specified in arg(0)), and builds logistic regression model to use all but final column, to
+    predict 0 or 1 of final column. Does simple train/test split.
+
+    Used iris dataset for building and testing, not guaranteed to work for anything else!
+
+    Assumptions:
+    - Final column in CSV is what needs to be modelled and is only 0 and 1 (rows with column equal or greater than
+      two are removed though)
+    - All feature columns numerics
+    - All feature columns are roughly the same scale (no scaling performed). Otherwise model will be poor.
+    - No regularistion needs to occur (should be a simple amendment to loss/gradient descent function if needed)
+    - Learning rate is 0.5, number of iterations is 20. Another couple of arguments would need to be added to allow
+      the user to change this, but should be quick to do.
+     */
+
 
     // Parse input arguments
     val filepath = args(0)
